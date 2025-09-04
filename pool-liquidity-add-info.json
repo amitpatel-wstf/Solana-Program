@@ -1,0 +1,19 @@
+{
+  "poolPDA": "AscvQNsqWGPL5iJkWXKaAS62QVPLg77obLUekom9UFV3",
+  "poolBump": 253,
+  "tokenS": "3eb5bXPzknE9CpbWjz8ALBqf1dZ5tEGcVwcocb41UU1z",
+  "tokenT": "CoSyfv9FSYgGPzPhq1J46g4jMeEbuuQgsfdN4E4WtciP",
+  "lpMint": "BJgVrWLaPig5NNbfQVVjx4venkD5f6kRZwLKRDqMEWcT",
+  "vaultS": "6ermPh1QHkY3RYSeHP83oa3gTnHmMopxmnanSud4EiHG",
+  "vaultT": "3dFpyEk3CWuugjySKth951wWMnim1cyAcDCY6Pxe4uBk",
+  "userTokenS": "G1wKkbFryTeSqVfsEkJ9xXPgLJPV8j1gR33FFGes887K",
+  "userTokenT": "CUtBjag6sDrhdmVsAXFKSk6KPUQMGoRNhDw8M6TzSC8X",
+  "userLP": "FYgVkqCnEPQtcaYBw3LCbstVKLM7Rui6fUPbZGMR2TnD",
+  "initialAmountS": 2000000000,
+  "initialAmountT": 3000000000,
+  "transactionSignature": "53KypoZYwooJjEKjWDsvEqSRbTunSLDmhUPnTYVPB1vpd75tHCSrm1GwDS5Ctuq2wqsN487oBy1ZYvPgRoPPB9jt",
+  "additionalAmountS": 20000000000,
+  "additionalAmountT": 30000000000,
+  "totalLPTokens": 51439284582,
+  "addLiquiditySignature": "555aTvyf5TeMaHXev3VhbboZB7NFpTPU7H8uV7dZtRhqQxzWFebCjnzQQc2Fjju5kMf4FUUUDPT6vZmWTcSwN3SM"
+}

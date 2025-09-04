@@ -1,0 +1,12 @@
+{
+  "type": "single_swap",
+  "direction": "S → T",
+  "amountIn": 5000000000,
+  "amountOut": 5559435648,
+  "tokenSUsed": 5000000000,
+  "tokenTReceived": 5559435648,
+  "directionAToB": true,
+  "poolPDA": "AscvQNsqWGPL5iJkWXKaAS62QVPLg77obLUekom9UFV3",
+  "transactionSignature": "MV7PQ7aQdJoyNN13EpJttaGwqWXASZNWYFuh6mRjvJ3nDcGnwKDypNF4eSvKYHAfMP8jL9hk4qq73Z8F1m1FkFW",
+  "timestamp": "2025-09-04T13:37:57.464Z"
+}

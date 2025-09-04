@@ -1,7 +1,10 @@
 import * as anchor from "@project-serum/anchor";
-import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes/index.js";
+// import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes/index.js";
+import bs58 from "bs58";
 import { Connection, Keypair, PublicKey, SystemProgram } from "@solana/web3.js";
 // import { Profile } from "./profile.ts"; // auto-generated types from IDL
+import "dotenv/config";
+
 export const Profile = {
   "version": "0.1.0",
   "name": "profiles",
@@ -567,10 +570,10 @@ const connection = new Connection(RPC_ENDPOINT, {
   commitment: 'confirmed',
   wsEndpoint: WS_ENDPOINT,
 });
-
+const PVT = process.env.PVT! as string;
 // Load wallet from ~/.config/solana/id.json
 const walletKeypair = Keypair.fromSecretKey(
-    bs58.decode("")
+    new Uint8Array(bs58.decode(PVT))
   );
 // Setup Anchor provider
 const provider = new anchor.AnchorProvider(
