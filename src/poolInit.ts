@@ -20,154 +20,123 @@ const AMM_PROGRAM_ID = new PublicKey("aBfrRgukSYDMgdyQ8y1XNEk4w5u7Ugtz5fPHFnkStJ
 // Helper function to get token balance
 async function getTokenBalance(tokenAccount: PublicKey): Promise<number> {
     try {
-      const account = await getAccount(connection, tokenAccount, "confirmed", SPL_TOKEN_PROGRAM_ID);
-      return Number(account.amount);
+        const account = await getAccount(connection, tokenAccount, "confirmed", SPL_TOKEN_PROGRAM_ID);
+        return Number(account.amount);
     } catch (error) {
-      return 0;
+        return 0;
     }
-  }
-  
-  // Helper function to format token amounts
-  function formatTokenAmount(amount: number, decimals: number = 9): string {
+}
+
+// Helper function to format token amounts
+function formatTokenAmount(amount: number, decimals: number = 9): string {
     return (amount / Math.pow(10, decimals)).toFixed(6);
-  }
+}
 
 async function initPoolST() {
     try {
         console.log("🚀 TypeScript Script: Initializing Pool S-T...");
 
         // Load Token S and T info from previous steps
-        const tokenSInfo = {
-            "mint": "3eb5bXPzknE9CpbWjz8ALBqf1dZ5tEGcVwcocb41UU1z",
+        const tokenYInfo = {
+            "mint": "FQ2pUcTxEEhNYiSBYnWe9b7VXPrGnZBLuv4M9fDg9Qsk",
             "userATA": "9bWZbvpmBrvgBvKAMJysG9rG8ZpBYjvumBj7SLsnzCFC",
-            "supply": 1000000000000,
+            "supply": 50,
             "decimals": 9,
             "transactionSignature": "5qQJoVRPBwKKmeuVQfRM9vmLL5UEpRrdcHyFmbyDS3zWHsE753Ydc9yaUkt6EZSaeP5vWki8VSv6tDUcrRSrfkbe"
-          }
-        const tokenTInfo = {
-            "mint": "CoSyfv9FSYgGPzPhq1J46g4jMeEbuuQgsfdN4E4WtciP",
+        }
+        const tokenZInfo = {
+            "mint": "9qZWyTziAaiwQuHnjCfHEup9peQyqCbzzbcNyMbUjw9G",
             "userATA": "9bWZbvpmBrvgBvKAMJysG9rG8ZpBYjvumBj7SLsnzCFC",
-            "supply": 1000000000000,
+            "supply": 100,
             "decimals": 9,
             "transactionSignature": "5qQJoVRPBwKKmeuVQfRM9vmLL5UEpRrdcHyFmbyDS3zWHsE753Ydc9yaUkt6EZSaeP5vWki8VSv6tDUcrRSrfkbe"
-          }
+        }
 
-        const TOKEN_S_MINT = new PublicKey(tokenSInfo.mint);
-        const TOKEN_T_MINT = new PublicKey(tokenTInfo.mint);
-        const LP_MINT = Keypair.generate(); // Generate new LP mint each time
+        const TOKEN_Y_MINT = new PublicKey(tokenYInfo.mint);
+        const TOKEN_Z_MINT = new PublicKey(tokenZInfo.mint);
 
-        console.log(`Token S: ${TOKEN_S_MINT.toString()}`);
-        console.log(`Token T: ${TOKEN_T_MINT.toString()}`);
-        console.log(`LP Mint: ${LP_MINT.publicKey.toString()}`);
+        console.log(`Token Y: ${TOKEN_Y_MINT.toString()}`);
+        console.log(`Token Z: ${TOKEN_Z_MINT.toString()}`);
 
-        // 1. Derive pool PDA
+        // 1. Derive pool PDA (no sorting - matching Rust program)
         const [poolPDA, poolBump] = await PublicKey.findProgramAddress(
-            [Buffer.from("pool"), TOKEN_S_MINT.toBuffer(), TOKEN_T_MINT.toBuffer()],
+            [Buffer.from("pool"), TOKEN_Y_MINT.toBuffer(), TOKEN_Z_MINT.toBuffer()],
             AMM_PROGRAM_ID
         );
         console.log(`Pool PDA: ${poolPDA.toString()}`);
 
-        // 2. Derive vault PDAs (matching Rust program logic)
-        const [vaultS, vaultSBump] = await PublicKey.findProgramAddress(
-            [Buffer.from("vault"), poolPDA.toBuffer(), TOKEN_S_MINT.toBuffer()],
+        // 2. Derive LP mint PDA (matching Rust program logic)
+        const [lpMintPDA, lpMintBump] = await PublicKey.findProgramAddress(
+            [Buffer.from("mint"), poolPDA.toBuffer()],
             AMM_PROGRAM_ID
         );
-        const [vaultT, vaultTBump] = await PublicKey.findProgramAddress(
-            [Buffer.from("vault"), poolPDA.toBuffer(), TOKEN_T_MINT.toBuffer()],
-            AMM_PROGRAM_ID
-        );
-        console.log(`Vault S: ${vaultS.toString()}`);
-        console.log(`Vault T: ${vaultT.toString()}`);
+        console.log(`LP Mint PDA: ${lpMintPDA.toString()}`);
 
-        // 3. User ATAs
-        const userTokenS = getAssociatedTokenAddressSync(TOKEN_S_MINT, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
-        const userTokenT = getAssociatedTokenAddressSync(TOKEN_T_MINT, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
-        const userLP = getAssociatedTokenAddressSync(LP_MINT.publicKey, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
-        console.log(`User Token S ATA: ${userTokenS.toString()}`);
-        console.log(`User Token T ATA: ${userTokenT.toString()}`);
+        // 3. Derive vault PDAs (matching Rust program logic)
+        const [vaultY, vaultYBump] = await PublicKey.findProgramAddress(
+            [Buffer.from("vault"), poolPDA.toBuffer(), TOKEN_Y_MINT.toBuffer()],
+            AMM_PROGRAM_ID
+        );
+        const [vaultZ, vaultZBump] = await PublicKey.findProgramAddress(
+            [Buffer.from("vault"), poolPDA.toBuffer(), TOKEN_Z_MINT.toBuffer()],
+            AMM_PROGRAM_ID
+        );
+        console.log(`Vault Y: ${vaultY.toString()}`);
+        console.log(`Vault Z: ${vaultZ.toString()}`);
+
+        // 4. User ATAs
+        const userTokenY = new PublicKey(tokenYInfo.userATA); // Use ATA from JSON file
+        const userTokenZ = new PublicKey(tokenZInfo.userATA); // Use ATA from JSON file
+        const userLP = getAssociatedTokenAddressSync(lpMintPDA, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
+        console.log(`User Token Y ATA: ${userTokenY.toString()}`);
+        console.log(`User Token Z ATA: ${userTokenZ.toString()}`);
         console.log(`User LP ATA: ${userLP.toString()}`);
 
         // 4. Check balances before pool initialization
         console.log("\n📊 Balances BEFORE Pool Initialization:");
-        const balanceTokenSBefore = await getTokenBalance(userTokenS);
-        const balanceTokenTBefore = await getTokenBalance(userTokenT);
-        console.log(`Token S: ${formatTokenAmount(balanceTokenSBefore)} (${balanceTokenSBefore} raw)`);
-        console.log(`Token T: ${formatTokenAmount(balanceTokenTBefore)} (${balanceTokenTBefore} raw)`);
+        const balanceTokenYBefore = await getTokenBalance(userTokenY);
+        const balanceTokenZBefore = await getTokenBalance(userTokenZ);
+        console.log(`Token Y: ${formatTokenAmount(balanceTokenYBefore)} (${balanceTokenYBefore} raw)`);
+        console.log(`Token Z: ${formatTokenAmount(balanceTokenZBefore)} (${balanceTokenZBefore} raw)`);
 
-        // 5. Pool initialization parameters with different ratio (2:3)
-        const amountS = 2_000_000_000; // 2 tokens
-        const amountT = 3_000_000_000; // 3 tokens
+        // 5. Pool initialization parameters with different ratio (3:4)
+        const amountY = 3_000_000_000; // 3 tokens
+        const amountZ = 4_000_000_000; // 4 tokens
 
         console.log(`\n🏊 Pool Initialization Parameters:`);
-        console.log(`Initial Token S: ${formatTokenAmount(amountS)} Token S`);
-        console.log(`Initial Token T: ${formatTokenAmount(amountT)} Token T`);
-        console.log(`Initial Ratio: 2:3`);
+        console.log(`Initial Token Y: ${formatTokenAmount(amountY)} Token Y`);
+        console.log(`Initial Token Z: ${formatTokenAmount(amountZ)} Token Z`);
+        console.log(`Initial Ratio: 3:4`);
 
         // 6. Create transaction
         const transaction = new Transaction();
 
-        // 6.1. Create LP mint account
-        transaction.add(
-            SystemProgram.createAccount({
-                fromPubkey: userKeypair.publicKey,
-                newAccountPubkey: LP_MINT.publicKey,
-                lamports: await connection.getMinimumBalanceForRentExemption(82),
-                space: 82,
-                programId: SPL_TOKEN_PROGRAM_ID,
-            })
-        );
+        // 6.1. Pool, vault, and LP mint accounts are created as PDAs by the program itself
+        // 6.2. User LP ATA will be created by the program
 
-        // 6.2. Initialize LP mint
-        transaction.add(
-            createInitializeMintInstruction(
-                LP_MINT.publicKey,
-                9, // decimals
-                poolPDA, // mint authority (pool PDA)
-                poolPDA, // freeze authority (pool PDA)
-                SPL_TOKEN_PROGRAM_ID
-            )
-        );
-
-        // 6.3. Vault accounts are created as PDAs by the program itself
-
-        // 6.5. Create user LP ATA if it doesn't exist
-        try {
-            await getAccount(connection, userLP, "confirmed", SPL_TOKEN_PROGRAM_ID);
-        } catch (error) {
-            transaction.add(
-                createAssociatedTokenAccountInstruction(
-                    userKeypair.publicKey, // payer
-                    userLP, // ata
-                    userKeypair.publicKey, // owner
-                    LP_MINT.publicKey, // mint
-                    SPL_TOKEN_PROGRAM_ID,
-                    ATA_PROGRAM_ID
-                )
-            );
-        }
-
-        // 6.6. Prepare accounts for InitPool (matching Rust program order)
+        // 6.3. Prepare accounts for InitPool (matching Rust program order)
         const accounts = [
             { pubkey: poolPDA, isSigner: false, isWritable: true },
-            { pubkey: TOKEN_S_MINT, isSigner: false, isWritable: false },
-            { pubkey: TOKEN_T_MINT, isSigner: false, isWritable: false },
-            { pubkey: vaultS, isSigner: false, isWritable: true }, // PDA, not a signer
-            { pubkey: vaultT, isSigner: false, isWritable: true }, // PDA, not a signer
-            { pubkey: LP_MINT.publicKey, isSigner: false, isWritable: true },
+            { pubkey: TOKEN_Y_MINT, isSigner: false, isWritable: false },
+            { pubkey: TOKEN_Z_MINT, isSigner: false, isWritable: false },
+            { pubkey: vaultY, isSigner: false, isWritable: true }, // PDA, not a signer
+            { pubkey: vaultZ, isSigner: false, isWritable: true }, // PDA, not a signer
+            { pubkey: lpMintPDA, isSigner: false, isWritable: true }, // LP mint PDA
             { pubkey: userKeypair.publicKey, isSigner: true, isWritable: false },
-            { pubkey: userTokenS, isSigner: false, isWritable: true },
-            { pubkey: userTokenT, isSigner: false, isWritable: true },
+            { pubkey: userTokenY, isSigner: false, isWritable: true },
+            { pubkey: userTokenZ, isSigner: false, isWritable: true },
             { pubkey: userLP, isSigner: false, isWritable: true },
             { pubkey: SPL_TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
             { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
             { pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
+            { pubkey: ATA_PROGRAM_ID, isSigner: false, isWritable: false }, // ATA Program
         ];
 
         // 6.7. Instruction data (Borsh: InitPool { amount_a, amount_b })
         const data = Buffer.alloc(1 + 8 + 8); // 1 byte discriminator + 2x u64
         data.writeUInt8(0, 0); // InitPool discriminator
-        data.writeBigUInt64LE(BigInt(amountS), 1);
-        data.writeBigUInt64LE(BigInt(amountT), 9);
+        data.writeBigUInt64LE(BigInt(amountY), 1);
+        data.writeBigUInt64LE(BigInt(amountZ), 9);
 
         console.log(`\n📝 Instruction data: ${data.toString('hex')}`);
 
@@ -183,44 +152,44 @@ async function initPoolST() {
         console.log("\n📝 Sending pool initialization transaction...");
         const signature = await sendAndConfirmTransaction(connection, transaction, [
             userKeypair,
-            LP_MINT,
         ], {
             commitment: "confirmed",
             preflightCommitment: "confirmed",
         });
 
-        console.log("✅ Pool S-T initialized successfully!");
-        console.log("Transaction signature: ${signature}");
+        console.log(`✅ Pool Y-Z initialized successfully!`);
+        console.log(`Transaction signature: ${signature}`);
 
         // 8. Check balances after pool initialization
         console.log("\n📊 Balances AFTER Pool Initialization:");
-        const balanceTokenSAfter = await getTokenBalance(userTokenS);
-        const balanceTokenTAfter = await getTokenBalance(userTokenT);
+        const balanceTokenYAfter = await getTokenBalance(userTokenY);
+        const balanceTokenZAfter = await getTokenBalance(userTokenZ);
         const balanceLPAfter = await getTokenBalance(userLP);
 
-        console.log(`Token S: ${formatTokenAmount(balanceTokenSAfter)} (${balanceTokenSAfter} raw)`);
-        console.log(`Token T: ${formatTokenAmount(balanceTokenTAfter)} (${balanceTokenTAfter} raw)`);
+        console.log(`Token Y: ${formatTokenAmount(balanceTokenYAfter)} (${balanceTokenYAfter} raw)`);
+        console.log(`Token Z: ${formatTokenAmount(balanceTokenZAfter)} (${balanceTokenZAfter} raw)`);
         console.log(`LP Tokens: ${formatTokenAmount(balanceLPAfter)} (${balanceLPAfter} raw)`);
 
         // 9. Save pool info
         const poolInfo = {
             poolPDA: poolPDA.toString(),
             poolBump,
-            tokenS: TOKEN_S_MINT.toString(),
-            tokenT: TOKEN_T_MINT.toString(),
-            lpMint: LP_MINT.publicKey.toString(),
-            vaultS: vaultS.toString(),
-            vaultT: vaultT.toString(),
-            userTokenS: userTokenS.toString(),
-            userTokenT: userTokenT.toString(),
+            tokenY: TOKEN_Y_MINT.toString(),
+            tokenZ: TOKEN_Z_MINT.toString(),
+            lpMint: lpMintPDA.toString(),
+            lpMintBump,
+            vaultY: vaultY.toString(),
+            vaultZ: vaultZ.toString(),
+            userTokenY: userTokenY.toString(),
+            userTokenZ: userTokenZ.toString(),
             userLP: userLP.toString(),
-            initialAmountS: amountS,
-            initialAmountT: amountT,
+            initialAmountY: amountY,
+            initialAmountZ: amountZ,
             transactionSignature: signature,
         };
 
-        fs.writeFileSync("pool-st-info.json", JSON.stringify(poolInfo, null, 2));
-        console.log("\n💾 Pool S-T info saved to pool-st-info.json");
+        fs.writeFileSync("scripts/pool-yz-info.json", JSON.stringify(poolInfo, null, 2));
+        console.log("\n💾 Pool Y-Z info saved to scripts/pool-yz-info.json");
 
     } catch (error) {
         console.error("❌ Error initializing pool S-T:", error);

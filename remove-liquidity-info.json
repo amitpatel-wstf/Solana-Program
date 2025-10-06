@@ -16,9 +16,9 @@
   "additionalAmountT": 30000000000,
   "totalLPTokens": 73328341850,
   "addLiquiditySignature": "5sj66M9QeduryvqVP42jdEVPeUAHwk1b229whoevstka5wHhJFmUn3y1KdhvwRtQvKEz43zMp3oKb3sC7QaNtm1h",
-  "removedLPTokens": 36664170925,
-  "tokenSReceived": 36000000000,
-  "tokenTReceived": 37360299696,
-  "remainingLPTokens": 36664170925,
-  "removeLiquiditySignature": "2gP23MwGsUcsxNx68shZaojEusSdBb6kMa3kEBTuSnZbn8LQZEKw1N96sEmk1WoNEbmDQF5swgzVwaWWpXxhR4cL"
+  "removedLPTokens": 18332085462,
+  "tokenSReceived": 518504999985,
+  "tokenTReceived": 650419696,
+  "remainingLPTokens": 18332085463,
+  "removeLiquiditySignature": "3N4e5U87cvzEZMQBKTGXgpFXhuGFzQBRNWUTeqjUwkm6x8RJut5xodVbMr58mZDBRa2ao1tSBQgMj1WkNcoc5oWp"
 }

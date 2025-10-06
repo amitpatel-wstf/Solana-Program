@@ -52,23 +52,19 @@ async function swapST() {
 
         // Load pool info from previous step
         const poolInfo = {
-            "poolPDA": "AscvQNsqWGPL5iJkWXKaAS62QVPLg77obLUekom9UFV3",
-            "poolBump": 253,
-            "tokenS": "3eb5bXPzknE9CpbWjz8ALBqf1dZ5tEGcVwcocb41UU1z",
-            "tokenT": "CoSyfv9FSYgGPzPhq1J46g4jMeEbuuQgsfdN4E4WtciP",
-            "lpMint": "BJgVrWLaPig5NNbfQVVjx4venkD5f6kRZwLKRDqMEWcT",
-            "vaultS": "6ermPh1QHkY3RYSeHP83oa3gTnHmMopxmnanSud4EiHG",
-            "vaultT": "3dFpyEk3CWuugjySKth951wWMnim1cyAcDCY6Pxe4uBk",
-            "userTokenS": "G1wKkbFryTeSqVfsEkJ9xXPgLJPV8j1gR33FFGes887K",
-            "userTokenT": "CUtBjag6sDrhdmVsAXFKSk6KPUQMGoRNhDw8M6TzSC8X",
-            "userLP": "FYgVkqCnEPQtcaYBw3LCbstVKLM7Rui6fUPbZGMR2TnD",
-            "initialAmountS": 2000000000,
-            "initialAmountT": 3000000000,
-            "transactionSignature": "53KypoZYwooJjEKjWDsvEqSRbTunSLDmhUPnTYVPB1vpd75tHCSrm1GwDS5Ctuq2wqsN487oBy1ZYvPgRoPPB9jt",
-            "additionalAmountS": 20000000000,
-            "additionalAmountT": 30000000000,
-            "totalLPTokens": 51439284582,
-            "addLiquiditySignature": "555aTvyf5TeMaHXev3VhbboZB7NFpTPU7H8uV7dZtRhqQxzWFebCjnzQQc2Fjju5kMf4FUUUDPT6vZmWTcSwN3SM"
+            "poolPDA": "3B5NCcJDPCUc3Cf9wofNGwStQw3oUVohemobqzc4eWBg",
+            "poolBump": 255,
+            "tokenS": "7Tcn9eJ2A4Qe27pTXXUQqZWfZBTF7CKzT3cwC2K85NAK",
+            "tokenT": "DN6oJ5AzjejDTQDSR7sjeHwvvCysZMvQfw8V3ACUxNw",
+            "lpMint": "9aVaY1xVwomeGSRsoRu6qXQ786VpvLh2GbKmFYCxaK5N",
+            "vaultS": "Ej6BJXdA1bM8kYGcKPZwcZdinYXdaFGcYaL2vdLQ6YmU",
+            "vaultT": "BTb4DNpqsssRo6KHEesmDWsA6W8xZjSDqWBgBDLAKJwH",
+            "userTokenS": "8ZFxm8hc392UtuJA8QKtaVLuLRvBXwryfCmefRswxUjP",
+            "userTokenT": "G5WEvMrmfwAoPa2qXi7jeHMRSueC6w71matFbubegfwV",
+            "userLP": "8DFfYMAhJx3XWPyQMqmBnigoAGz2CKGra3AR5r3j6yn3",
+            "initialAmountS": 20000000000,
+            "initialAmountT": 30000000000,
+            "transactionSignature": "VfSPwBZcRqNSEhZqfE4SJSNGHQ4kddJwE6JEQf8ZeSwEbJAZPPCJ3z66FohMseV51JH9fcbh3j1ZiX5Xn2AL4hV"
           }
 
         const poolPDA = new PublicKey(poolInfo.poolPDA);

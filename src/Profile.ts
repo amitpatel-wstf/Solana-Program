@@ -566,7 +566,7 @@ const PROGRAM_ID = new PublicKey("GrJrqEtxztquco6Zsg9WfrArYwy5BZwzJ4ce4TfcJLuJ")
 
 const RPC_ENDPOINT = 'https://rpc.gorbchain.xyz';
 const WS_ENDPOINT = 'wss://rpc.gorbchain.xyz/ws/';
-const connection = new Connection(RPC_ENDPOINT, {
+export const connection = new Connection(RPC_ENDPOINT, {
   commitment: 'confirmed',
   wsEndpoint: WS_ENDPOINT,
 });
@@ -622,4 +622,4 @@ async function createProfile(username: string) {
   console.log(`✅ Tx Signature: ${tx}`);
 }
 
-createProfile("alice"); // username must be normalized (lowercase a-z0-9._-)
+// createProfile("alice"); // username must be normalized (lowercase a-z0-9._-)

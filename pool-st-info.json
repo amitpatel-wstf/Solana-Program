@@ -1,19 +1,86 @@
 {
-  "poolPDA": "AscvQNsqWGPL5iJkWXKaAS62QVPLg77obLUekom9UFV3",
-  "poolBump": 253,
-  "tokenS": "3eb5bXPzknE9CpbWjz8ALBqf1dZ5tEGcVwcocb41UU1z",
-  "tokenT": "CoSyfv9FSYgGPzPhq1J46g4jMeEbuuQgsfdN4E4WtciP",
-  "lpMint": "BJgVrWLaPig5NNbfQVVjx4venkD5f6kRZwLKRDqMEWcT",
-  "vaultS": "6ermPh1QHkY3RYSeHP83oa3gTnHmMopxmnanSud4EiHG",
-  "vaultT": "3dFpyEk3CWuugjySKth951wWMnim1cyAcDCY6Pxe4uBk",
-  "userTokenS": "G1wKkbFryTeSqVfsEkJ9xXPgLJPV8j1gR33FFGes887K",
-  "userTokenT": "CUtBjag6sDrhdmVsAXFKSk6KPUQMGoRNhDw8M6TzSC8X",
-  "userLP": "FYgVkqCnEPQtcaYBw3LCbstVKLM7Rui6fUPbZGMR2TnD",
-  "initialAmountS": 2000000000,
-  "initialAmountT": 3000000000,
-  "transactionSignature": "53KypoZYwooJjEKjWDsvEqSRbTunSLDmhUPnTYVPB1vpd75tHCSrm1GwDS5Ctuq2wqsN487oBy1ZYvPgRoPPB9jt",
+  "poolAddress": "A9vniGqSiRGU81ZKFaPk2pHgsq6zcvssZVooWSck4Uy2",
+  "poolType": "Regular",
+  "dataLength": 89,
+  "rawData": "d5ea0825796a7768080a0007746717f757507817a9a50205259d30408abff36b834e241ea627efb9efbc2e70b947198570a14dfa7858a8a6a6a8a81d3d079df7ff006484cf25090000952e95eb0a09000000a0724e18090000",
+  "tokenA": "FQ2pUcTxEEhNYiSBYnWe9b7VXPrGnZBLuv4M9fDg9Qsk",
+  "tokenB": "9qZWyTziAaiwQuHnjCfHEup9peQyqCbzzbcNyMbUjw9G",
+  "bump": 255,
+  "reserveA": 10058000000000,
+  "reserveB": 9942506745493,
+  "totalLPSupply": 10000000000000,
+  "feeBps": 0,
+  "feePercentage": 0,
+  "tokenAInfo": {
+    "mintAddress": "FQ2pUcTxEEhNYiSBYnWe9b7VXPrGnZBLuv4M9fDg9Qsk",
+    "programId": "G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6",
+    "supply": "1000567000000000",
+    "decimals": "9",
+    "name": "USDC",
+    "symbol": "USDC",
+    "uri": "null",
+    "mintAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+    "freezeAuthority": null,
+    "updateAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+    "isInitialized": true,
+    "isFrozen": false,
+    "metadata": {
+      "mintInfo": {
+        "supply": "1000567000000000",
+        "decimals": 9,
+        "isInitialized": true,
+        "mintAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+        "freezeAuthority": null
+      },
+      "programId": "G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6",
+      "tokenMetadata": {
+        "uri": "null",
+        "mint": "FQ2pUcTxEEhNYiSBYnWe9b7VXPrGnZBLuv4M9fDg9Qsk",
+        "name": "USDC",
+        "symbol": "USDC",
+        "updateAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+        "additionalMetadata": []
+      }
+    },
+    "createdAt": "2025-09-06T12:31:47.669Z",
+    "lastUpdated": "2025-09-06T12:31:47.669Z"
+  },
+  "tokenBInfo": {
+    "mintAddress": "9qZWyTziAaiwQuHnjCfHEup9peQyqCbzzbcNyMbUjw9G",
+    "programId": "G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6",
+    "supply": "1000000123000000000",
+    "decimals": "9",
+    "name": "HEDGE",
+    "symbol": "HEDGE",
+    "uri": "null",
+    "mintAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+    "freezeAuthority": null,
+    "updateAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+    "isInitialized": true,
+    "isFrozen": false,
+    "metadata": {
+      "mintInfo": {
+        "supply": "1000000123000000000",
+        "decimals": 9,
+        "isInitialized": true,
+        "mintAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+        "freezeAuthority": null
+      },
+      "programId": "G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6",
+      "tokenMetadata": {
+        "uri": "null",
+        "mint": "9qZWyTziAaiwQuHnjCfHEup9peQyqCbzzbcNyMbUjw9G",
+        "name": "HEDGE",
+        "symbol": "HEDGE",
+        "updateAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+        "additionalMetadata": []
+      }
+    },
+    "createdAt": "2025-09-06T12:31:48.591Z",
+    "lastUpdated": "2025-09-06T12:31:48.591Z"
+  },
   "additionalAmountS": 20000000000,
   "additionalAmountT": 30000000000,
-  "totalLPTokens": 73328341850,
-  "addLiquiditySignature": "5sj66M9QeduryvqVP42jdEVPeUAHwk1b229whoevstka5wHhJFmUn3y1KdhvwRtQvKEz43zMp3oKb3sC7QaNtm1h"
+  "totalLPTokens": 10019908596505,
+  "addLiquiditySignature": "29wyKvx9iiBGwqhTqu5bXedDrq57R1UwKrf6LvwkW25oSSaCRQMbnh2BGii8Wh7By3vNsrw6Ni1CMyxxuhEHnAxa"
 }

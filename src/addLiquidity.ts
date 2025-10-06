@@ -5,194 +5,212 @@ import {
     Transaction,
     sendAndConfirmTransaction,
 } from "@solana/web3.js";
-import {
-    getAssociatedTokenAddressSync,
-    getAccount,
-} from "@solana/spl-token";
-import * as fs from "fs";
+// import {
+//     getAssociatedTokenAddressSync,
+//     getAccount,
+// } from "@solana/spl-token";
+// import * as fs from "fs";
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes/index.js";
 import "dotenv/config";
 
-// --- CONFIG ---
-const RPC_ENDPOINT = "https://rpc.gorbchain.xyz";
-const WS_ENDPOINT = "wss://rpc.gorbchain.xyz/ws/";
-const AMM_PROGRAM_ID = new PublicKey("aBfrRgukSYDMgdyQ8y1XNEk4w5u7Ugtz5fPHFnkStJX");
-const SPL_TOKEN_PROGRAM_ID = new PublicKey("G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6");
-const ATA_PROGRAM_ID = new PublicKey("GoATGVNeSXerFerPqTJ8hcED1msPWHHLxao2vwBYqowm");
+// // --- CONFIG ---
+// const RPC_ENDPOINT = "https://rpc.gorbchain.xyz";
+// const WS_ENDPOINT = "wss://rpc.gorbchain.xyz/ws/";
+// const AMM_PROGRAM_ID = new PublicKey("aBfrRgukSYDMgdyQ8y1XNEk4w5u7Ugtz5fPHFnkStJX");
+// const SPL_TOKEN_PROGRAM_ID = new PublicKey("G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6");
+// const ATA_PROGRAM_ID = new PublicKey("GoATGVNeSXerFerPqTJ8hcED1msPWHHLxao2vwBYqowm");
 
-const USER_KEYPAIR_PATH = "/home/saurabh/.config/solana/id.json";
+
 export const userKeypair = Keypair.fromSecretKey(new Uint8Array(bs58.decode(process.env.PVT!)));
 
 
-const connection = new Connection(RPC_ENDPOINT, {
-    commitment: "confirmed",
-    wsEndpoint: WS_ENDPOINT,
-});
+// const connection = new Connection(RPC_ENDPOINT, {
+//     commitment: "confirmed",
+//     wsEndpoint: WS_ENDPOINT,
+// });
 
-// Helper function to get token balance
-async function getTokenBalance(tokenAccount: PublicKey): Promise<number> {
-    try {
-        const account = await getAccount(connection, tokenAccount, "confirmed", SPL_TOKEN_PROGRAM_ID);
-        return Number(account.amount);
-    } catch (error) {
-        return 0;
-    }
-}
+// // Helper function to get token balance
+// async function getTokenBalance(tokenAccount: PublicKey): Promise<number> {
+//     try {
+//         const account = await getAccount(connection, tokenAccount, "confirmed", SPL_TOKEN_PROGRAM_ID);
+//         return Number(account.amount);
+//     } catch (error) {
+//         return 0;
+//     }
+// }
 
-// Helper function to format token amounts
-function formatTokenAmount(amount: number, decimals: number = 9): string {
-    return (amount / Math.pow(10, decimals)).toFixed(6);
-}
+// // Helper function to format token amounts
+// function formatTokenAmount(amount: number, decimals: number = 9): string {
+//     return (amount / Math.pow(10, decimals)).toFixed(6);
+// }
 
-/**
- * TypeScript Script: Add Liquidity to Pool S-T
- * Based on IDL: AddLiquidity (discriminant: 1)
- * Args: amountA (u64), amountB (u64)
- */
-async function addLiquidityST() {
-    try {
-        console.log("🚀 TypeScript Script: Adding Liquidity to Pool S-T...");
+// /**
+//  * TypeScript Script: Add Liquidity to Pool S-T
+//  * Based on IDL: AddLiquidity (discriminant: 1)
+//  * Args: amountA (u64), amountB (u64)
+//  */
+// async function addLiquidity(poolInfo:any,wallet:Wallet,connection:Connection,amountA:number,amountB:number) {
+//     try {
+//         console.log("🚀 TypeScript Script: Adding Liquidity to Pool S-T...");
 
-        // Load pool info from previous step
-        const poolInfo = {
-            "poolPDA": "AscvQNsqWGPL5iJkWXKaAS62QVPLg77obLUekom9UFV3",
-            "poolBump": 253,
-            "tokenS": "3eb5bXPzknE9CpbWjz8ALBqf1dZ5tEGcVwcocb41UU1z",
-            "tokenT": "CoSyfv9FSYgGPzPhq1J46g4jMeEbuuQgsfdN4E4WtciP",
-            "lpMint": "BJgVrWLaPig5NNbfQVVjx4venkD5f6kRZwLKRDqMEWcT",
-            "vaultS": "6ermPh1QHkY3RYSeHP83oa3gTnHmMopxmnanSud4EiHG",
-            "vaultT": "3dFpyEk3CWuugjySKth951wWMnim1cyAcDCY6Pxe4uBk",
-            "userTokenS": "G1wKkbFryTeSqVfsEkJ9xXPgLJPV8j1gR33FFGes887K",
-            "userTokenT": "CUtBjag6sDrhdmVsAXFKSk6KPUQMGoRNhDw8M6TzSC8X",
-            "userLP": "FYgVkqCnEPQtcaYBw3LCbstVKLM7Rui6fUPbZGMR2TnD",
-            "initialAmountS": 2000000000,
-            "initialAmountT": 3000000000,
-            "transactionSignature": "53KypoZYwooJjEKjWDsvEqSRbTunSLDmhUPnTYVPB1vpd75tHCSrm1GwDS5Ctuq2wqsN487oBy1ZYvPgRoPPB9jt"
-        }
+//         // Load pool info from previous step
+//         const poolInfo = {
+//             "poolAddress": "A9vniGqSiRGU81ZKFaPk2pHgsq6zcvssZVooWSck4Uy2",
+//             "poolType": "Regular",
+//             "dataLength": 89,
+//             "rawData": "d5ea0825796a7768080a0007746717f757507817a9a50205259d30408abff36b834e241ea627efb9efbc2e70b947198570a14dfa7858a8a6a6a8a81d3d079df7ff006484cf25090000952e95eb0a09000000a0724e18090000",
+//             "tokenA": "FQ2pUcTxEEhNYiSBYnWe9b7VXPrGnZBLuv4M9fDg9Qsk",
+//             "tokenB": "9qZWyTziAaiwQuHnjCfHEup9peQyqCbzzbcNyMbUjw9G",
+//             "bump": 255,
+//             "reserveA": 10058000000000,
+//             "reserveB": 9942506745493,
+//             "totalLPSupply": 10000000000000,
+//             "feeBps": 0,
+//             "feePercentage": 0,
+//             "tokenAInfo": {
+//                 "mintAddress": "FQ2pUcTxEEhNYiSBYnWe9b7VXPrGnZBLuv4M9fDg9Qsk",
+//                 "programId": "G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6",
+//                 "supply": "1000567000000000",
+//                 "decimals": "9",
+//                 "name": "USDC",
+//                 "symbol": "USDC",
+//                 "uri": "null",
+//                 "mintAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+//                 "freezeAuthority": null,
+//                 "updateAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+//                 "isInitialized": true,
+//                 "isFrozen": false,
+//                 "metadata": {
+//                     "mintInfo": {
+//                         "supply": "1000567000000000",
+//                         "decimals": 9,
+//                         "isInitialized": true,
+//                         "mintAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+//                         "freezeAuthority": null
+//                     },
+//                     "programId": "G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6",
+//                     "tokenMetadata": {
+//                         "uri": "null",
+//                         "mint": "FQ2pUcTxEEhNYiSBYnWe9b7VXPrGnZBLuv4M9fDg9Qsk",
+//                         "name": "USDC",
+//                         "symbol": "USDC",
+//                         "updateAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+//                         "additionalMetadata": []
+//                     }
+//                 },
+//                 "createdAt": "2025-09-06T12:31:47.669Z",
+//                 "lastUpdated": "2025-09-06T12:31:47.669Z"
+//             },
+//             "tokenBInfo": {
+//                 "mintAddress": "9qZWyTziAaiwQuHnjCfHEup9peQyqCbzzbcNyMbUjw9G",
+//                 "programId": "G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6",
+//                 "supply": "1000000123000000000",
+//                 "decimals": "9",
+//                 "name": "HEDGE",
+//                 "symbol": "HEDGE",
+//                 "uri": "null",
+//                 "mintAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+//                 "freezeAuthority": null,
+//                 "updateAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+//                 "isInitialized": true,
+//                 "isFrozen": false,
+//                 "metadata": {
+//                     "mintInfo": {
+//                         "supply": "1000000123000000000",
+//                         "decimals": 9,
+//                         "isInitialized": true,
+//                         "mintAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+//                         "freezeAuthority": null
+//                     },
+//                     "programId": "G22oYgZ6LnVcy7v8eSNi2xpNk1NcZiPD8CVKSTut7oZ6",
+//                     "tokenMetadata": {
+//                         "uri": "null",
+//                         "mint": "9qZWyTziAaiwQuHnjCfHEup9peQyqCbzzbcNyMbUjw9G",
+//                         "name": "HEDGE",
+//                         "symbol": "HEDGE",
+//                         "updateAuthority": "Fds56LQv7DqPrwxte7NwQMxV9irEVRZivTwEx82Tijg7",
+//                         "additionalMetadata": []
+//                     }
+//                 },
+//                 "createdAt": "2025-09-06T12:31:48.591Z",
+//                 "lastUpdated": "2025-09-06T12:31:48.591Z"
+//             }
+//         }
 
-        const poolPDA = new PublicKey(poolInfo.poolPDA);
-        const TOKEN_S_MINT = new PublicKey(poolInfo.tokenS);
-        const TOKEN_T_MINT = new PublicKey(poolInfo.tokenT);
-        const LP_MINT = new PublicKey(poolInfo.lpMint);
-        const vaultS = new PublicKey(poolInfo.vaultS);
-        const vaultT = new PublicKey(poolInfo.vaultT);
+//         const poolPDA = new PublicKey(poolInfo.poolAddress);
+//         const TOKEN_S_MINT = new PublicKey(poolInfo.tokenA);
+//         const TOKEN_T_MINT = new PublicKey(poolInfo.tokenB);
+//         // const LP_MINT = new PublicKey(poolInfo.lpMint);
+//         const [LP_MINT, lpMintBump] = await PublicKey.findProgramAddress(
+//             [Buffer.from("mint"), poolPDA.toBuffer()],
+//             AMM_PROGRAM_ID
+//         );
+//         // 3. Derive vault PDAs (matching Rust program logic)
+//         const [vaultS, vaultYBump] = await PublicKey.findProgramAddress(
+//             [Buffer.from("vault"), poolPDA.toBuffer(), TOKEN_S_MINT.toBuffer()],
+//             AMM_PROGRAM_ID
+//         );
+//         const [vaultT, vaultZBump] = await PublicKey.findProgramAddress(
+//             [Buffer.from("vault"), poolPDA.toBuffer(), TOKEN_T_MINT.toBuffer()],
+//             AMM_PROGRAM_ID
+//         );
 
-        console.log(`Pool PDA: ${poolPDA.toString()}`);
-        console.log(`Token S: ${TOKEN_S_MINT.toString()}`);
-        console.log(`Token T: ${TOKEN_T_MINT.toString()}`);
-        console.log(`LP Mint: ${LP_MINT.toString()}`);
+//         // User ATAs
+//         const userTokenS = getAssociatedTokenAddressSync(TOKEN_S_MINT, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
+//         const userTokenT = getAssociatedTokenAddressSync(TOKEN_T_MINT, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
+//         const userLP = getAssociatedTokenAddressSync(LP_MINT, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
 
-        // User ATAs
-        const userTokenS = getAssociatedTokenAddressSync(TOKEN_S_MINT, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
-        const userTokenT = getAssociatedTokenAddressSync(TOKEN_T_MINT, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
-        const userLP = getAssociatedTokenAddressSync(LP_MINT, userKeypair.publicKey, false, SPL_TOKEN_PROGRAM_ID, ATA_PROGRAM_ID);
+//         console.log(`User Token S ATA: ${userTokenS.toString()}`);
+//         console.log(`User Token T ATA: ${userTokenT.toString()}`);
+//         console.log(`User LP ATA: ${userLP.toString()}`);
+//         // Define liquidity amounts (maintaining 2:3 ratio)
+//         const amountS = formatTokenAmount(amountA,Number(poolInfo.tokenAInfo.decimals)); // 20 tokens
+//         const amountT = formatTokenAmount(amountB,Number(poolInfo.tokenBInfo.decimals));  // 30 tokens
 
-        console.log(`User Token S ATA: ${userTokenS.toString()}`);
-        console.log(`User Token T ATA: ${userTokenT.toString()}`);
-        console.log(`User LP ATA: ${userLP.toString()}`);
+//         // Create transaction
+//         const transaction = new Transaction();
 
-        // Check balances before adding liquidity
-        console.log("\n📊 Balances BEFORE Adding Liquidity:");
-        const balanceTokenSBefore = await getTokenBalance(userTokenS);
-        const balanceTokenTBefore = await getTokenBalance(userTokenT);
-        const balanceLPBefore = await getTokenBalance(userLP);
+//         // Prepare accounts for AddLiquidity (matching working JavaScript script order)
+//         const accounts = [
+//             { pubkey: poolPDA, isSigner: false, isWritable: true },
+//             { pubkey: TOKEN_S_MINT, isSigner: false, isWritable: false },
+//             { pubkey: TOKEN_T_MINT, isSigner: false, isWritable: false },
+//             { pubkey: vaultS, isSigner: false, isWritable: true },
+//             { pubkey: vaultT, isSigner: false, isWritable: true },
+//             { pubkey: LP_MINT, isSigner: false, isWritable: true },
+//             { pubkey: userTokenS, isSigner: false, isWritable: true },
+//             { pubkey: userTokenT, isSigner: false, isWritable: true },
+//             { pubkey: userLP, isSigner: false, isWritable: true },
+//             { pubkey: userKeypair.publicKey, isSigner: true, isWritable: false },
+//             { pubkey: SPL_TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+//         ];
 
-        console.log(`Token S: ${formatTokenAmount(balanceTokenSBefore)} (${balanceTokenSBefore} raw)`);
-        console.log(`Token T: ${formatTokenAmount(balanceTokenTBefore)} (${balanceTokenTBefore} raw)`);
-        console.log(`LP Tokens: ${formatTokenAmount(balanceLPBefore)} (${balanceLPBefore} raw)`);
+//         // Instruction data (Borsh: AddLiquidity { amount_a, amount_b })
+//         const data = Buffer.alloc(1 + 8 + 8); // 1 byte discriminator + 2x u64
+//         data.writeUInt8(1, 0); // AddLiquidity discriminator
+//         data.writeBigUInt64LE(BigInt(amountS), 1);
+//         data.writeBigUInt64LE(BigInt(amountT), 9);
 
-        // Define liquidity amounts (maintaining 2:3 ratio)
-        const amountS = 20_000_000_000; // 20 tokens
-        const amountT = 30_000_000_000; // 30 tokens
+//         console.log(`\n📝 Instruction data: ${data.toString('hex')}`);
 
-        console.log(`\n🏊 Adding Liquidity Parameters:`);
-        console.log(`Token S Amount: ${formatTokenAmount(amountS)} Token S`);
-        console.log(`Token T Amount: ${formatTokenAmount(amountT)} Token T`);
-        console.log(`Ratio: 2:3 (maintaining pool ratio)`);
+//         // Add AddLiquidity instruction
+//         console.log("📝 Adding AddLiquidity instruction...");
+//         transaction.add({
+//             keys: accounts,
+//             programId: AMM_PROGRAM_ID,
+//             data,
+//         });
 
-        // Create transaction
-        const transaction = new Transaction();
+//         //  you have to sign the transaction by wallet and return result  and display as result pop up
 
-        // Prepare accounts for AddLiquidity (matching working JavaScript script order)
-        const accounts = [
-            { pubkey: poolPDA, isSigner: false, isWritable: true },
-            { pubkey: TOKEN_S_MINT, isSigner: false, isWritable: false },
-            { pubkey: TOKEN_T_MINT, isSigner: false, isWritable: false },
-            { pubkey: vaultS, isSigner: false, isWritable: true },
-            { pubkey: vaultT, isSigner: false, isWritable: true },
-            { pubkey: LP_MINT, isSigner: false, isWritable: true },
-            { pubkey: userTokenS, isSigner: false, isWritable: true },
-            { pubkey: userTokenT, isSigner: false, isWritable: true },
-            { pubkey: userLP, isSigner: false, isWritable: true },
-            { pubkey: userKeypair.publicKey, isSigner: true, isWritable: false },
-            { pubkey: SPL_TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
-        ];
 
-        // Instruction data (Borsh: AddLiquidity { amount_a, amount_b })
-        const data = Buffer.alloc(1 + 8 + 8); // 1 byte discriminator + 2x u64
-        data.writeUInt8(1, 0); // AddLiquidity discriminator
-        data.writeBigUInt64LE(BigInt(amountS), 1);
-        data.writeBigUInt64LE(BigInt(amountT), 9);
 
-        console.log(`\n📝 Instruction data: ${data.toString('hex')}`);
 
-        // Add AddLiquidity instruction
-        console.log("📝 Adding AddLiquidity instruction...");
-        transaction.add({
-            keys: accounts,
-            programId: AMM_PROGRAM_ID,
-            data,
-        });
+//     } catch (error) {
+//         console.error("❌ Error adding liquidity to Pool S-T:", error);
+//         throw error;
+//     }
+// }
 
-        // Send transaction
-        console.log("\n📝 Sending add liquidity transaction...");
-        const signature = await sendAndConfirmTransaction(connection, transaction, [
-            userKeypair,
-        ], {
-            commitment: "confirmed",
-            preflightCommitment: "confirmed",
-        });
-
-        console.log(`✅ Liquidity added to Pool S-T successfully!`);
-        console.log(`Transaction signature: ${signature}`);
-
-        // Check balances after adding liquidity
-        console.log("\n📊 Balances AFTER Adding Liquidity:");
-        const balanceTokenSAfter = await getTokenBalance(userTokenS);
-        const balanceTokenTAfter = await getTokenBalance(userTokenT);
-        const balanceLPAfter = await getTokenBalance(userLP);
-
-        console.log(`Token S: ${formatTokenAmount(balanceTokenSAfter)} (${balanceTokenSAfter} raw)`);
-        console.log(`Token T: ${formatTokenAmount(balanceTokenTAfter)} (${balanceTokenTAfter} raw)`);
-        console.log(`LP Tokens: ${formatTokenAmount(balanceLPAfter)} (${balanceLPAfter} raw)`);
-
-        // Calculate changes
-        const tokenSUsed = balanceTokenSBefore - balanceTokenSAfter;
-        const tokenTUsed = balanceTokenTBefore - balanceTokenTAfter;
-        const lpTokensReceived = balanceLPAfter - balanceLPBefore;
-
-        console.log(`\n📈 Liquidity Changes:`);
-        console.log(`Token S Used: ${formatTokenAmount(tokenSUsed)}`);
-        console.log(`Token T Used: ${formatTokenAmount(tokenTUsed)}`);
-        console.log(`LP Tokens Received: ${formatTokenAmount(lpTokensReceived)}`);
-
-        // Save updated pool info
-        const updatedPoolInfo = {
-            ...poolInfo,
-            additionalAmountS: amountS,
-            additionalAmountT: amountT,
-            totalLPTokens: balanceLPAfter,
-            addLiquiditySignature: signature,
-        };
-
-        fs.writeFileSync("pool-st-info.json", JSON.stringify(updatedPoolInfo, null, 2));
-        console.log("\n💾 Updated Pool S-T info saved to pool-st-info.json");
-
-    } catch (error) {
-        console.error("❌ Error adding liquidity to Pool S-T:", error);
-        throw error;
-    }
-}
-
-// Run the function
-// addLiquidityST().catch(console.error);
+// // Run the function
+// // addLiquidityST().catch(console.error);
